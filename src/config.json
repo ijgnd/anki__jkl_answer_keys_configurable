@@ -3,5 +3,7 @@
     "reviewer_1":"h",
     "reviewer_2":"j",
     "reviewer_3":"k",
-    "reviewer_4":"l"
+    "reviewer_4":"l",
+    "adjust_the_meaning_of_the_answer_keys_depending_on_number_of_answer_buttons":false,
+    "adjusted_answer_keys__second_key_for_less_than_four_buttons":"ignore"
 }

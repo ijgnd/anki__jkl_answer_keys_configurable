@@ -1,0 +1,71 @@
+This add-on offers to use the right hand for rating and 
+
+- ... you can configure whether pressing an answer key while you see only the question answers the card directly without showing you the answer (as the similar add-ons (<a href="https://ankiweb.net/shared/info/1212877655" rel="nofollow">Right Hand Reviews (jkl;)</a> and <a href="https://ankiweb.net/shared/info/1816717670" rel="nofollow">Right Hand Answer Shortcuts</a> do it). Or the answer keys can just unveil the answer (just as the 2.0 add-on <a href="https://ankiweb.net/shared/info/1310550323" rel="nofollow">Right-hand reviews with jkl;</a> did it). The latter is the default. 
+- ... you can configure the answer keys (defaults are "h" for 1, etc) from the add-on window.
+- ... you can configure if the meaning of the "2" and "3" key should be adjusted depending on the number of buttons you see. This will be less important once the V2 scheduler is no longer experimental but the default. Then you'll also have 4 buttons for new and learning cards, see <a href="https://anki.tenderapp.com/kb/anki-ecosystem/experiment-scheduling-changes-in-anki-21" rel="nofollow">this document</a> and <a href="https://github.com/dae/anki/blob/master/anki/schedv2.py#L149" rel="nofollow">this source code on github</a>.
+
+
+Use this at your own risk. If you find any bugs or have some feedback it's best to leave a message <a href="https://github.com/ijgnd/anki__jkl_answer_keys_configurable/issues" rel="nofollow">on github</a>.
+
+
+If you just want to remap the answer keys you could also have a look at  <a href="https://ankiweb.net/shared/info/24411424" rel="nofollow">Customize Keyboard Shortcuts</a>. 
+
+
+There are many other add-ons for right hand answering. At the moment (2019-08-20) the ones I find all have some problem in my view:
+
+1. <a href="https://ankiweb.net/shared/info/2090822731" rel="nofollow">Handy Answer Keys Shortcuts</a> (2.0 only, last updated in 2013-07-06, 58 upvotes)
+2. <a href="https://ankiweb.net/shared/info/1848421740" rel="nofollow">Handy Answer Keys Shortcuts Amended</a> (2.0 only, last updated in 2016-12-09, 1 upvote)
+3. <a href="https://ankiweb.net/shared/info/1848421740" rel="nofollow">Handy Answer Keys Shortcuts Plus</a> (2.0 only, last updated in 2019-06-16, 0 upvotes)
+4. <a href="https://ankiweb.net/shared/info/1310550323" rel="nofollow">Right-hand reviews with jkl;</a> (2.0 only, last updated in 2013-11-12, 22 upvotes)
+5. <a href="https://ankiweb.net/shared/info/1212877655" rel="nofollow">Right Hand Reviews (jkl;)</a> (2.1 only, last updated in 2019-03-18, 8 upvotes)
+6. <a href="https://ankiweb.net/shared/info/1816717670" rel="nofollow">Right Hand Answer Shortcuts</a> (2.1 only, last updated in 2018-09-29, 3 upvotes)
+
+- when you press an answer button 5. and 6. the cards is directly rated. So you can't use "k" to unveil and then rate. So no add-on for 2.1 offers to show the answer
+- no add-on allows the user to set the keys in 2.1.
+- the add-ons 1., 2., 3. adjust the meaning of the buttons. The add-ons 1. and 3. have inconsistent behavior in my view. Among this pressing "l" on a three button card (like a learn card with the default scheduler)  when only the question is shown rates it as "good", whereas when you see then answer it's rated as "easy" (for details see below).
+
+
+
+
+This add-on started as a modification of Austin Hasten's <a href="https://ankiweb.net/shared/info/1212877655" rel="nofollow">Right Hand Reviews (jkl;)</a>.
+
+# about the "Handy Answer Keys" add-ons for 2.0
+
+The highly popular <a href="https://ankiweb.net/shared/info/2090822731" rel="nofollow">Handy Answer Keys Shortcuts</a> (in 2019-08-20 58 upvotes and last updated in 2013-07-06) has this source code:
+
+    elif key == "k":
+        if isq:
+            self._answerCard(self._defaultEase())  # is either 3 (for four buttons, review) or 2
+        else:
+            self._answerCard(2)
+
+So the meaning of the button "k" changes: If you just see the question a review card gets rated as "good", if you see the answer it gets rated as "hard". 
+
+You also have this:
+
+    elif key == "l":
+        if isq:
+            self._answerCard(self._defaultEase())
+        else:    
+            self._answerCard(3 if cnt >= 3 else cnt)
+
+"self._defaultEase()" evaluates to three for four buttons, else two. So pressing "l" on a learn card when only the question 
+is shown rates it as "good", whereas when you see then answer it's rated as "easy". 
+
+
+The add-on <a href="https://ankiweb.net/shared/info/1848421740 rel="nofollow">Handy Answer Keys Shortcuts Amended</a> (in 2019-08-20 1 upvote and last updated in 2016-12-09) removes this ambiguity:
+
+    elif key == "k":
+        self._answerCard(2)
+    elif key == "l":
+        self._answerCard(3 if cnt >= 3 else cnt)
+
+This means that the third key "l" means easy for learning cards but "good" for cards in review. So the meaning changes.
+
+
+The add-on <a href="https://ankiweb.net/shared/info/1848421740 rel="nofollow">Handy Answer Keys Shortcuts Plus</a> (in 2019-08-20 0 upvotes and last updated in 2019-06-16) has the same key meanings as the original add-on from 2013.
+
+
+
+
+
