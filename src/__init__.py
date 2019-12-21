@@ -1,9 +1,28 @@
-# AGPLv3
-# Copyright Austin Hasten 2018, ijgnd 2019
+"""
+# License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
+# Copyright 2019 ijgnd
+#           2018 Austin Hasten
+#           2018 Eric Hu
 
 
-from aqt import mw
+the dictionary "Qt_functions" is taken from the add-on "anki-custom-shortcuts"
+which is covered by the following copyright and permission notice,
+https://github.com/Liresol/anki-custom-shortcuts/blob/master/LICENSE:
+
+    Copyright 2018 Eric Hu
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"""
+
+
+
 from anki.hooks import wrap
+from aqt import mw
+from aqt.qt import *
 from aqt.reviewer import Reviewer
 from aqt.utils import tooltip
 
@@ -46,12 +65,37 @@ def my_answer_hack(self, ease):
                     self._answerCard(1)
 
 
+Qt_functions = {
+                # already used by Anki
+                # "Qt.Key_Enter":Qt.Key_Enter, 
+                # "Qt.Key_Return":Qt.Key_Return,
+                "Qt.Key_Escape": Qt.Key_Escape,
+                "Qt.Key_Space": Qt.Key_Space,
+                "Qt.Key_Tab": Qt.Key_Tab,
+                "Qt.Key_Backspace": Qt.Key_Backspace,
+                "Qt.Key_Delete": Qt.Key_Delete,
+                "Qt.Key_Left": Qt.Key_Left,
+                "Qt.Key_Down": Qt.Key_Down,
+                "Qt.Key_Right": Qt.Key_Right,
+                "Qt.Key_Up": Qt.Key_Up,
+                "Qt.Key_PageUp": Qt.Key_PageUp,
+                "Qt.Key_PageDown": Qt.Key_PageDown,
+                }
+
+
+def key_hack(val):
+    if val in Qt_functions:
+        return Qt_functions[val]
+    else:
+        return val
+
+
 def newShortcutKeys(self, _old):
     return _old(self) + [
-        (gc("reviewer_1", 1), lambda: my_answer_hack(self, 1)),
-        (gc("reviewer_2", 2), lambda: my_answer_hack(self, 2)),
-        (gc("reviewer_3", 3), lambda: my_answer_hack(self, 3)),
-        (gc("reviewer_4", 4), lambda: my_answer_hack(self, 4)),
+        (key_hack(gc("reviewer_1", 1)), lambda: my_answer_hack(self, 1)),
+        (key_hack(gc("reviewer_2", 2)), lambda: my_answer_hack(self, 2)),
+        (key_hack(gc("reviewer_3", 3)), lambda: my_answer_hack(self, 3)),
+        (key_hack(gc("reviewer_4", 4)), lambda: my_answer_hack(self, 4)),
     ]
 
 def newAnswerCard(self, ease, _old):
@@ -62,4 +106,4 @@ def newAnswerCard(self, ease, _old):
 
 Reviewer._shortcutKeys = wrap(Reviewer._shortcutKeys, newShortcutKeys, "around")
 Reviewer._answerCard = wrap(Reviewer._answerCard, newAnswerCard, "around")
- 
+
